@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import ningde from '@/views/ningde.vue'
 import history from '@/views/history.vue'
+import simple from '@/views/simple.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,14 @@ export const routes = [
     component: history,
     meta: {
       title: '历史视频'
+    }
+  },
+  {
+    path: '/simple',
+    name: 'simple',
+    component: simple,
+    meta: {
+      title: '基本示例'
     }
   }
 ]

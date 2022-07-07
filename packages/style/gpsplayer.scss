@@ -6,6 +6,7 @@
 } */
 .videoContainer{
   background-color: #333333;
+  position: relative;
 }
 .videoContainerSelected{
   border:1px solid #0090ff;
@@ -206,6 +207,8 @@
   height: 100%;
   position: absolute;
   z-index: 2;
+  top: 0;
+  left: 0;
 }
 .speedDiv{
   background-color: rgba(0,0,0,0.4);

@@ -43,13 +43,13 @@ export default {
     width: {
       type: [String, Number],
       default () {
-        return '360px'
+        return '640px'
       }
     },
     height: {
       type: [String, Number],
       default () {
-        return '202.5px'
+        return '360px'
       }
     },
     top: {
