@@ -8,6 +8,8 @@ module.exports = {
       filename: 'index.html'
     }
   },
+  publicPath: './',
+  css: { extract: false },
   productionSourceMap: false,
   devServer: {
     hotOnly: true,
@@ -54,7 +56,7 @@ module.exports = {
       .test(/\.(png|jpe?g|gif)$/i)
       .use('url-loader')
       .loader('url-loader')
-      .tap(options => Object.assign(options, { limit: 1024 * 8, esModule: false })) // 配置线上图片转base64。
+      .tap(options => Object.assign(options, { limit: 1024 * 100, esModule: false })) // 配置线上图片转base64。
       .end()
   }
 }

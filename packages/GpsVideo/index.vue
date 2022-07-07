@@ -122,6 +122,7 @@ import flvJs from 'flv.js'
 import getBlobDuration from 'get-blob-duration'
 import ysFixWebmDuration from 'fix-webm-duration'
 import vProgress from '~/GpsVideo/progress'
+import poster from '~/images/poster.png'
 // import dayjs from 'dayjs'
 
 export default {
@@ -157,7 +158,7 @@ export default {
     poster: {
       type: String,
       default () {
-        return require('~/images/poster.png')
+        return poster
       }
     },
     // 播放状态
@@ -376,6 +377,9 @@ export default {
       document.getElementById('msgDiv' + this.videoId).innerHTML = ''
     },
     bindDevice (lastFrameUrl) {
+      if (!this.deviceId) {
+        return false
+      }
       console.log('bind device')
       if (this.fileId) {
         this.fileIdPlay = this.fileId.replace(' - ', '_').replace(/\s+/g, '')
