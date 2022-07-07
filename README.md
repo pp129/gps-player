@@ -40,8 +40,8 @@ export default {
             this.device.name = 'devicename' // device name
         },
         stop () {
-          this.device.id = ''// device id
-          this.device.name = '' // device name
+          this.device.id = ''
+          this.device.name = ''
         }
     }
 }

@@ -27,12 +27,12 @@ export default {
   },
   methods: {
     play () {
-      this.device.id = '35020300021320000017'// device id
-      this.device.name = '事业部领导小区' // device name
+      this.device.id = '35020300021320000017'
+      this.device.name = '事业部领导小区'
     },
     stop () {
-      this.device.id = ''// device id
-      this.device.name = '' // device name
+      this.device.id = ''
+      this.device.name = ''
     }
   }
 }
