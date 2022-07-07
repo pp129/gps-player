@@ -278,6 +278,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "packages/style/progress";
-@import "packages/style/range-input";
 </style>

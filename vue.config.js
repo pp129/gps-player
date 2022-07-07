@@ -1,5 +1,4 @@
 const path = require('path')
-
 module.exports = {
   // 修改默认的入口
   pages: {
@@ -52,5 +51,12 @@ module.exports = {
         // 修改它的选项...
         return options
       })
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif)$/i)
+      .use('url-loader')
+      .loader('url-loader')
+      .tap(options => Object.assign(options, { limit: 1024 * 8, esModule: false })) // 配置线上图片转base64。
+      .end()
   }
 }

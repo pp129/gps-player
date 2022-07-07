@@ -1447,9 +1447,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "packages/style/gpsplayer";
-@import "packages/style/filter";
-@import "packages/style/progress";
 .position{
   position: absolute;
 }

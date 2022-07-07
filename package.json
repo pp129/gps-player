@@ -1,6 +1,6 @@
 {
   "name": "gps-player",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "private": false,
   "main": "lib/gps-player.umd.min.js",
   "scripts": {
@@ -44,6 +44,7 @@
     "js-cookie": "^3.0.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "url-loader": "^4.1.1",
     "vue-template-compiler": "^2.6.11"
   }
 }
