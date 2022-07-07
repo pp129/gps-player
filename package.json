@@ -1,13 +1,15 @@
 {
   "name": "gps-player",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": false,
+  "main": "lib/gps-player.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "clean:lib": "rimraf lib",
     "build:lib": "vue-cli-service build --target lib --name gps-player --dest lib packages/index.js",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "publish": "npm publish"
   },
   "dependencies": {
     "axios": "^0.27.2",
