@@ -1,8 +1,4 @@
 import Vue from 'vue'
-import './style/gpsplayer.scss'
-import './style/filter.scss'
-import './style/progress.scss'
-import './style/range-input.scss'
 import GpsPlayer from '~/GpsPlayer'
 import GpsVideo from '~/GpsVideo'
 Vue.component(GpsPlayer.name, GpsPlayer)
