@@ -1,0 +1,35 @@
+.progress{
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+}
+
+input[type=range] {/*input外壳样式*/
+  -webkit-appearance: none;
+  border-radius: 10px;
+  height: 4px;
+  z-index: 10;
+}
+
+input[type=range]::-webkit-slider-runnable-track {/*轨道*/
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+input[type=range]::-webkit-slider-thumb {/*滑块*/
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  margin-top: -4px;
+  background: #ffffff !important;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.progressStepPop{
+  background: rgba(255,255,255,0.3);
+  padding: 0 4px;
+  border-radius: 4px;
+  color: white;
+}

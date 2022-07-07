@@ -1,0 +1,215 @@
+*, :after, :before {
+  box-sizing: border-box;
+}
+/* video::-webkit-media-controls{
+  display:none !important;
+} */
+.videoContainer{
+  background-color: #333333;
+}
+.videoContainerSelected{
+  border:1px solid #0090ff;
+}
+.videoTitle{
+  width:100%;
+  height:30px;
+  color:white;
+  background-color:rgba(7, 11, 20, .5);
+  line-height:  30px;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+}
+.videoElement{
+  -webkit-filter: brightness(1) contrast(1) grayscale(0) saturate(1);
+  filter: brightness(1) contrast(1) grayscale(0) saturate(1);
+  z-index: 998;
+}
+.videoDiv{
+  width: 100%;
+  height:100%;
+  //float: left;
+  position: relative;
+}
+.videoToolBar{
+  height:30px;
+  width:100%;
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(6,11,17,.5);
+  z-index: 999;
+}
+.progressHis{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+.processBox{
+  cursor: pointer;
+  z-index: 999;
+}
+.progressTime{
+  height: 30px;
+  line-height: 30px;
+  position: absolute;
+  left: 122px;
+}
+.progressRate{
+  height: 30px;
+  line-height: 30px;
+  position: absolute;
+  left: 260px;
+}
+.toolBtn{
+  width:30px;
+  height:100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+.toolBtn:hover{
+  background-color: rgba(99, 94, 94, 0.7);
+}
+.play{
+  background-image: url(../images/play.png);
+  float: left;
+}
+.pause{
+  background-image: url(../images/pause.png);
+  float: left;
+}
+.stop{
+  background-image: url(../images/stop.png);
+  float: left;
+}
+.muted{
+  background-image: url(../images/muted.png);
+  float: left;
+}
+.unmuted{
+  background-image: url(../images/unmuted.png);
+  float: left;
+}
+.startTalk{
+  background-image: url(../images/startTalk.png);
+  float: left;
+  background-size: 70%
+}
+.stopTalk{
+  background-image: url(../images/stopTalk.png);
+  float: left;
+  background-size: 70%
+}
+.fullScreen{
+  background-image: url(../images/fullScreen.png);
+  float: right;
+}
+.narrowScreen{
+  background-image: url(../images/narrowScreen.png);
+  float: right;
+}
+.snapshot{
+  background-image: url(../images/snapshot.png);
+  float: right;
+}
+.tiling{
+  color:white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+  float: right;
+}
+.untiling{
+  color:white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+  float: right;
+}
+.control{
+  color:white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+  float: left;
+  width: 50px;
+}
+.startRecord{
+  background-image: url(../images/startRecord.png);
+  float: right;
+  background-size: 65%
+}
+.stopRecord{
+  background-image: url(../images/stopRecord.png);
+  float: right;
+  background-size: 65%
+}
+.startAI{
+  background-image: url(../images/startAI.png);
+  float: right;
+  background-size: 60%
+}
+.stopAI{
+  background-image: url(../images/stopAI.png);
+  float: right;
+  background-size: 60%
+}
+.openSetting{
+  background-image: url(../images/openSetting.png);
+  float: right;
+  background-size: 65%
+}
+.closeSetting{
+  background-image: url(../images/closeSetting.png);
+  float: right;
+  background-size: 65%
+}
+.msgDiv{
+  width: 100%;
+  height: 0;
+  text-align: center;
+  color: white;
+  position: absolute;
+  bottom: 7vh;
+  font-size: 12px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  z-index: 999;
+}
+.settingDiv{
+  width: 50%;
+  height: 50%;
+  max-width: 500px;
+  max-height: 250px;
+  min-width: 300px;
+  min-height: 150px;
+  color: white;
+  position: absolute;
+  bottom: 30px;
+  right: 0;
+  opacity: 0.8;
+  background: #001427;
+  font-size: 14px;
+  z-index: 999;
+}
+.loading{
+  background-image: url(../images/loading.png);
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0);
+  background-position: center;
+  background-size:40px 40px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+}
+.speedDiv{
+  background-color: rgba(0,0,0,0.4);
+  border-radius: 10px;
+  display: inline-block;
+  padding: 3px 10px 3px 10px;
+}
