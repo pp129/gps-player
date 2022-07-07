@@ -8,8 +8,6 @@ module.exports = {
       filename: 'index.html'
     }
   },
-  publicPath: './',
-  assetsDir: 'static',
   productionSourceMap: false,
   devServer: {
     hotOnly: true,
