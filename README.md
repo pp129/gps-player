@@ -7,6 +7,6 @@ npm install gps-player
 
 ## demo
 ```
-npm run serve
+git clone https://github.com/pp129/gps-player.git
 ```
 
