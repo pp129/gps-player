@@ -1,6 +1,6 @@
 {
   "name": "gps-player",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
   "main": "lib/gps-player.umd.min.js",
   "scripts": {

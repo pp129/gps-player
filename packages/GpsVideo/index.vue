@@ -59,11 +59,11 @@
         </div>
         <!-- 历史视频倍速 -->
         <div v-if="showProgress" :id="'progressRate'+videoId" class="progressRate">
-          <span @click="setOperation(1)" style="color: white">快退</span>
-          <select v-if="showRate" @change="setRate" v-model="rate">
+          <div @click="setOperation(1)" class="toolBtn fastBackward"></div>
+          <select v-if="showRate" @change="setRate" v-model="rate" class="rateSelection">
             <option v-for="(item,index) in rateList[operation]" :key="index" :value="item.value">{{ item.name }}</option>
           </select>
-          <span @click="setOperation(0)" style="color: white">快进</span>
+          <div @click="setOperation(0)" class="toolBtn fastForward"></div>
         </div>
         <!-- 画面拉伸/标准 按钮 -->
         <div v-if="toolTiling" class="toolBtn" :id="toolsMap.tiling.id" :class="toolsMap.tiling.active?'tiling':'untiling'" :title="toolsMap.tiling.active?'拉伸':'标准'" @click="tilingEvent">{{toolsMap.tiling.active?'拉伸':'标准'}}</div>

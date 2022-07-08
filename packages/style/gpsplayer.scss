@@ -63,6 +63,11 @@
   line-height: 30px;
   position: absolute;
   left: 260px;
+  display: flex;
+  align-items: center;
+}
+.rateSelection{
+  height: 85%;
 }
 .toolBtn{
   width:30px;
@@ -73,6 +78,14 @@
 }
 .toolBtn:hover{
   background-color: rgba(99, 94, 94, 0.7);
+}
+.fastBackward{
+  background-image: url(../images/fastBackward.png);
+  background-size: 50% 50%;
+}
+.fastForward{
+  background-image: url(../images/fastForward.png);
+  background-size: 50% 50%;
 }
 .play{
   background-image: url(../images/play.png);
