@@ -116,7 +116,7 @@
 
 <script>
 import { nanoid } from 'nanoid'
-import axios from 'axios'
+import $axios from '~/api'
 import qs from 'qs'
 import flvJs from 'flv.js'
 import getBlobDuration from 'get-blob-duration'
@@ -416,7 +416,7 @@ export default {
       // debugger
       // return false
       // eslint-disable-next-line no-unreachable
-      axios.post('/getVideoUrl', qs.stringify(params)).then(response => {
+      $axios.post('/getVideoUrl', qs.stringify(params)).then(response => {
         const data = response.data
         if (data.flag) {
           this.historyUUID = data.entity.uuid
@@ -803,7 +803,7 @@ export default {
         // logicalChannelNumber: paramArr[1],
         userName: this.GpsPlayer.userName
       }
-      const res = await axios.post('/startTalkBack', qs.stringify(params))
+      const res = await $axios.post('/startTalkBack', qs.stringify(params))
       const data = res.data
       if (data.flag) {
         const result = await this.openMike(paramArr[0])
@@ -913,7 +913,7 @@ export default {
         deviceId: paramArr[0],
         userName: this.GpsPlayer.userName
       }
-      const res = await axios.post('/stopTalkBack', qs.stringify(params))
+      const res = await $axios.post('/stopTalkBack', qs.stringify(params))
       const data = res.data
       if (data.flag) {
         this.audioContext.close()
@@ -1257,7 +1257,7 @@ export default {
           deviceId: this.deviceId,
           action: action
         }
-        axios.post('/ptzControl', qs.stringify(params))
+        $axios.post('/ptzControl', qs.stringify(params))
           .then(function (response) {
             const data = response.data
             if (data.flag) {
@@ -1330,7 +1330,7 @@ export default {
       // 记录跳转的时间差
       this.seekTime = this.progressPoint - video.currentTime
       this.pause()
-      const res = await axios.post('/seek', qs.stringify(params))
+      const res = await $axios.post('/seek', qs.stringify(params))
       console.log(res)
       const data = res.data
       // 跳转到缓存的最新位置，防止暂停一直在收码流
@@ -1413,7 +1413,7 @@ export default {
       // 通知播放变速控制 this.pause(index);
       this.showLoading = true
       // 通知播放变速控制
-      const res = await axios.post('/playbackControl', qs.stringify(params))
+      const res = await $axios.post('/playbackControl', qs.stringify(params))
       const data = res.data
       if (data.flag) {
         if (this.operation === 0 || this.operation === 1) {

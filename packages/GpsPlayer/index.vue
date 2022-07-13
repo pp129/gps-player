@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import $axios from '~/api'
 import Cookies from 'js-cookie'
 import { JSEncrypt } from 'jsencrypt'
 import { nanoid } from 'nanoid'
@@ -182,33 +182,14 @@ export default {
       return encrypt.encrypt(password)
     },
     setServer () {
-      axios.defaults.baseURL = this.server + '/api'
-      // 修改请求头
-      axios.interceptors.request.use(request => {
-        const userToken = Cookies.get('playerUserToken')
-        if (userToken) {
-          const encrypt = new JSEncrypt()
-          // 设置公钥
-          encrypt.setPublicKey(this.publicKey)
-          const token = userToken.split('.')
-          const token1 = encrypt.encrypt(token[0])
-          const token2 = encrypt.encrypt(token[1])
-          const token3 = encrypt.encrypt(token[2])
-          request.headers.UserToken1 = token1
-          request.headers.UserToken2 = token2
-          request.headers.UserToken3 = token3
-        }
-        return request
-      }, error => {
-        return Promise.reject(error)
-      })
+      $axios.defaults.baseURL = this.server + '/api'
     },
     login () {
       const params = {
         userName: this.userName,
         password: this.getCode(this.password)
       }
-      return axios.post('/login', qs.stringify(params)).then(res => {
+      return $axios.post('/login', qs.stringify(params)).then(res => {
         return Promise.resolve(res)
       }).catch(err => {
         return Promise.reject(err)
@@ -305,7 +286,7 @@ export default {
       this.$emit('onClose')
     },
     getHisResourceList (params) {
-      return axios.post('/getHisResourceList', qs.stringify(params)).then(res => {
+      return $axios.post('/getHisResourceList', qs.stringify(params)).then(res => {
         console.log(res)
         const data = res.data
         if (data.flag) {
@@ -326,7 +307,7 @@ export default {
         deviceId: deviceId,
         fileId: fileId.replace(' - ', '_').replace(/\s+/g, '')
       }
-      return axios.post('/download', qs.stringify(params)).then(res => {
+      return $axios.post('/download', qs.stringify(params)).then(res => {
         const data = res.data
         if (data.flag) {
           const uuid = data.entity
@@ -346,7 +327,7 @@ export default {
         deviceId: deviceId,
         fileId: fileId.replace(' - ', '_').replace(/\s+/g, '')
       }
-      return axios.post('/stopDownload', qs.stringify(params)).then(res => {
+      return $axios.post('/stopDownload', qs.stringify(params)).then(res => {
         return res.data
       })
     },
@@ -373,9 +354,9 @@ export default {
           if (data.state !== 'downloading') {
             if (data.state === 'finish') {
               // 上传成功
-              const finishUrl = '/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
-              window.location.href = _this.server + finishUrl
-              _this.$emit('onDownloadFinish', finishUrl)
+              // const finishUrl = '/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
+              // window.location.href = _this.server + finishUrl
+              _this.$emit('onDownloadFinish', deviceId, fileId)
             }
             ws.close()
             ws = null
@@ -402,6 +383,11 @@ export default {
     getDownloadMsg (deviceId, fileId) {
       const key = deviceId + '_' + fileId.replace(' - ', '_').replace(/\s+/g, '')
       return this.downloadMap.get(key)
+    },
+    openDownLoadUrl (deviceId, fileId) {
+      // downloadHisFile(deviceId, fileId)
+      const url = '/sppt/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
+      window.open(url)
     }
   },
   created () {

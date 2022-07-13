@@ -16,7 +16,8 @@
         <li style="cursor: pointer;" v-for="history in item.historyList" :key="history.fileId">
           <span @click.prevent="playHistory(item,history)">{{history.fileId}}</span>
           <span style="margin-left: 5px;" @click.p.prevent="download(item,history)">下载</span>
-          <span style="margin-left: 5px;" @click.p.prevent="stopDownload(item,history)">停止下载</span>
+          <span style="margin-left: 5px;">上传进度：{{history.downloadPercent}}</span>
+          <span style="margin-left: 5px;" @click.p.prevent="stopDownload(item,history)">取消</span>
         </li>
       </ul>
     </li>
@@ -31,7 +32,7 @@
     :server="server" :ws-server="wsServer" :user-name="userName" :password="password"
     draggable
     closeable
-    @onClose="onClose">
+    @onClose="onClose" @onDownloading="onDownloading" @onDownloadFinish="onDownloadFinish">
     <template #close>
       <div style="width:50px;">关闭</div>
     </template>
@@ -78,7 +79,7 @@ export default {
           name: '国宝路与万安东路-北球机',
           type: '球机',
           ptzControl: true,
-          beginTime: dayjs().subtract(1, 'h').format('YYYY-MM-DDTHH:mm'),
+          beginTime: dayjs().subtract(0.1, 'h').format('YYYY-MM-DDTHH:mm'),
           endTime: dayjs().format('YYYY-MM-DDTHH:mm'),
           historyList: []
         },
@@ -89,7 +90,7 @@ export default {
           name: '宁一大厦楼顶高空球通道_1',
           type: '高空球',
           ptzControl: true,
-          beginTime: dayjs().subtract(1, 'h').format('YYYY-MM-DDTHH:mm'),
+          beginTime: dayjs().subtract(0.1, 'h').format('YYYY-MM-DDTHH:mm'),
           endTime: dayjs().format('YYYY-MM-DDTHH:mm'),
           historyList: []
         },
@@ -100,7 +101,7 @@ export default {
           name: '天湖东路东方伟业广场路口-违停',
           type: '违停球',
           ptzControl: true,
-          beginTime: dayjs().subtract(1, 'h').format('YYYY-MM-DDTHH:mm'),
+          beginTime: dayjs().subtract(0.1, 'h').format('YYYY-MM-DDTHH:mm'),
           endTime: dayjs().format('YYYY-MM-DDTHH:mm'),
           historyList: []
         },
@@ -111,7 +112,7 @@ export default {
           owner: '华为',
           type: '球机',
           ptzControl: true,
-          beginTime: dayjs().subtract(1, 'h').format('YYYY-MM-DDTHH:mm'),
+          beginTime: dayjs().subtract(0.1, 'h').format('YYYY-MM-DDTHH:mm'),
           endTime: dayjs().format('YYYY-MM-DDTHH:mm'),
           historyList: []
         }
@@ -181,13 +182,37 @@ export default {
     },
     download (item, history) {
       this.$refs.gpsPlayer.download(item.id, history.fileId).then(res => {
-        console.log(res)
+        console.log('download', res)
+        item.fileId = history.fileId
+        history.uuid = res.entity
+      })
+    },
+    onDownloading (info) {
+      console.log(info)
+      this.deviceList.forEach(device => {
+        const key = device.id + '_' + device.fileId.replace(' - ', '_').replace(/\s+/g, '')
+        const value = info.get(key)
+        console.log(value)
+        console.log(device.historyList)
+        device.historyList.forEach(item => {
+          if (item.uuid === value.uuid) {
+            const downloadPercent = Number(value.realsize) / Number(value.filesize)
+            console.log(downloadPercent)
+            item.downloadPercent = (downloadPercent * 100).toFixed(2) + '%'
+            this.$forceUpdate()
+          }
+        })
       })
     },
     stopDownload (item, history) {
       this.$refs.gpsPlayer.stopDownload(item.id, history.fileId).then(res => {
         console.log(res)
       })
+    },
+    onDownloadFinish (deviceId, fileId) {
+      // const url = 'http://35.231.35.131:8000/sppt/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
+      // window.open(url)
+      this.$refs.gpsPlayer.openDownLoadUrl(deviceId, fileId)
     }
   }
 }
