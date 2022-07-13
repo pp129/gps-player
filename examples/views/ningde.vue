@@ -13,7 +13,11 @@
       <button @click="getHistory(item)">历史视频</button>
       <button @click="item.historyList = []">重置</button>
       <ul style="display: inline-block;">
-        <li style="cursor: pointer;" v-for="history in item.historyList" :key="history.fileId" @click.prevent="playHistory(item,history)">{{history.fileId}}</li>
+        <li style="cursor: pointer;" v-for="history in item.historyList" :key="history.fileId">
+          <span @click.prevent="playHistory(item,history)">{{history.fileId}}</span>
+          <span style="margin-left: 5px;" @click.p.prevent="download(item,history)">下载</span>
+          <span style="margin-left: 5px;" @click.p.prevent="stopDownload(item,history)">停止下载</span>
+        </li>
       </ul>
     </li>
   </ul>
@@ -24,7 +28,7 @@
     :height="720"
     :bottom="20"
     :left="20"
-    :server="server" :user-name="userName" :password="password"
+    :server="server" :ws-server="wsServer" :user-name="userName" :password="password"
     draggable
     closeable
     @onClose="onClose">
@@ -59,8 +63,11 @@ export default {
     return {
       showPlayer: true,
       server: '/sppt',
-      userName: 'XMGPS_JW',
-      password: 'Xmgps@2022',
+      wsServer: 'ws://35.231.35.131:8000/sppt',
+      // userName: 'XMGPS_JW',
+      // password: 'Xmgps@2022',
+      userName: 'admin',
+      password: 'Xmgps@0592',
       videoTitle: 'name',
       deviceId: '',
       deviceList: [
@@ -126,6 +133,7 @@ export default {
         this.playing.name = this.deviceList.filter(x => x.id === id)[0].name
         this.playing.ptzControl = this.deviceList.filter(x => x.id === id)[0].ptzControl
         this.playing.fileId = this.deviceList.filter(x => x.id === id)[0].fileId
+        console.log(this.playing)
       }
     },
     pause (id) {
@@ -136,7 +144,9 @@ export default {
     stop (id) {
       if (id) {
         console.log(this.$refs)
-        this.$refs[`video-${id}`].stop()
+        if (this.$refs[`video-${id}`]) {
+          this.$refs[`video-${id}`].stop()
+        }
       }
     },
     onClose () {
@@ -157,8 +167,27 @@ export default {
     },
     playHistory (item, history) {
       console.log(item, history)
-      item.fileId = history.fileId
-      this.play(item.id)
+      this.playing.id = item.id
+      this.playing.fileId = history.fileId
+      // this.playing.id = item.id
+      // item.fileId = history.fileId
+      // if (this.$refs[`video-${item.id}`]) {
+      //   this.$refs[`video-${item.id}`].stop().then(() => {
+      //     this.play(item.id)
+      //   })
+      // } else {
+      //   this.play(item.id)
+      // }
+    },
+    download (item, history) {
+      this.$refs.gpsPlayer.download(item.id, history.fileId).then(res => {
+        console.log(res)
+      })
+    },
+    stopDownload (item, history) {
+      this.$refs.gpsPlayer.stopDownload(item.id, history.fileId).then(res => {
+        console.log(res)
+      })
     }
   }
 }

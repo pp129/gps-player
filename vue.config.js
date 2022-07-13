@@ -16,11 +16,19 @@ module.exports = {
     open: true,
     proxy: {
       '/sppt': {
-        target: 'http://172.16.34.29:6088/sppt', // gps
-        // target: 'http://35.231.35.131:8000/sppt', // nd spw
+        // target: 'http://172.16.34.29:6088/sppt', // gps
+        target: 'http://35.231.35.131:8000/sppt', // nd spw
         changeOrigin: true,
         pathRewrite: {
           '^/sppt': '/'
+        }
+      },
+      '/ws': {
+        target: 'ws://35.231.35.131:8000/sppt', // nd spw
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/ws': '/'
         }
       }
     }

@@ -82,6 +82,9 @@ export default {
       type: String,
       required: true
     },
+    wsServer: {
+      type: String
+    },
     // 用户名
     userName: {
       type: String,
@@ -311,6 +314,94 @@ export default {
       }).catch(err => {
         return Promise.reject(err)
       })
+    },
+    /**
+     * 根据设备id和文件id下载文件
+     * @param {*} deviceId  设备id
+     * @param {*} fileId  文件id
+     */
+    download (deviceId, fileId) {
+      // 通知后台查询历史文件列表
+      const params = {
+        deviceId: deviceId,
+        fileId: fileId.replace(' - ', '_').replace(/\s+/g, '')
+      }
+      return axios.post('/download', qs.stringify(params)).then(res => {
+        const data = res.data
+        if (data.flag) {
+          const uuid = data.entity
+          this._download(deviceId, fileId, uuid)
+        }
+        return data
+      })
+    },
+    /**
+     * 根据设备id和文件id停止下载文件
+     * @param {*} deviceId  设备id
+     * @param {*} fileId  文件id
+     */
+    stopDownload (deviceId, fileId) {
+      // 通知后台查询历史文件列表
+      const params = {
+        deviceId: deviceId,
+        fileId: fileId.replace(' - ', '_').replace(/\s+/g, '')
+      }
+      return axios.post('/stopDownload', qs.stringify(params)).then(res => {
+        return res.data
+      })
+    },
+    _download (deviceId, fileId, uuid) {
+      fileId = fileId.replace(' - ', '_').replace(/\s+/g, '')
+      const key = deviceId + '_' + fileId
+      if (uuid === null || uuid === undefined || uuid === '') {
+        this.downloadMap.set(key, { state: 'finish' })
+        // 无uuid表示文件已经存在，直接下载
+        window.location.href = this.server + '/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
+      }
+      if ('WebSocket' in window) {
+        // 打开一个 web socket
+        let ws = new WebSocket(this.wsServer + '/wsDownload')
+        this.downloadWebsocketMap.set(key, ws)
+        ws.onopen = function () {
+          // Web Socket 已连接上，使用 send() 方法发送数据
+          ws.send(uuid)
+        }
+        const _this = this
+        ws.onmessage = function (evt) {
+          const data = JSON.parse(evt.data)
+          _this.downloadMap.set(key, data)
+          if (data.state !== 'downloading') {
+            if (data.state === 'finish') {
+              // 上传成功
+              const finishUrl = '/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
+              window.location.href = _this.server + finishUrl
+              _this.$emit('onDownloadFinish', finishUrl)
+            }
+            ws.close()
+            ws = null
+            // 删除下载状态的key
+            setTimeout(() => { _this.downloadMap.delete(key) }, 1500)
+            // 删除存放的websocket
+            _this.downloadWebsocketMap.delete(key)
+          }
+          _this.$emit('onDownloading', _this.downloadMap)
+        }
+        ws.onclose = function () {
+          // 关闭 websocket
+        }
+      } else {
+        // 浏览器不支持 WebSocket
+        console.info('您的浏览器不支持 WebSocket!')
+      }
+    },
+    /**
+     * 获取实时下载信息
+     * @param {*} deviceId 设备id
+     * @param {*} fileId   文件id
+     */
+    getDownloadMsg (deviceId, fileId) {
+      const key = deviceId + '_' + fileId.replace(' - ', '_').replace(/\s+/g, '')
+      return this.downloadMap.get(key)
     }
   },
   created () {

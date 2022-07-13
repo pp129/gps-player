@@ -205,6 +205,7 @@ export default {
   },
   data () {
     return {
+      isResetFileId: false,
       VideoUrl: '',
       showVideo: true,
       unPlayTimer: null,
@@ -351,10 +352,17 @@ export default {
   watch: {
     deviceId: {
       handler (newValue, oldValue) {
-        console.log('newValue', newValue)
-        console.log('oldValue', oldValue)
+        console.log('device id', newValue, oldValue)
         if (newValue) {
           this.bindDevice()
+        }
+      }
+    },
+    fileId: {
+      handler (newValue, oldValue) {
+        console.log('file id', newValue, oldValue)
+        if (oldValue && newValue) {
+          this.bindDeviceFile()
         }
       }
     }
@@ -375,6 +383,13 @@ export default {
      */
     clearMsg () {
       document.getElementById('msgDiv' + this.videoId).innerHTML = ''
+    },
+    bindDeviceFile () {
+      if (!this.deviceId) {
+        return false
+      }
+      this.isResetFileId = true// !!!加上这个判断让stop不去置空deviceId，避免重复触发bindDevice方法
+      this.bindDevice()
     },
     bindDevice (lastFrameUrl) {
       if (!this.deviceId) {
@@ -637,8 +652,11 @@ export default {
       }
       // 清除录屏截图前缀名称
       this.clearScreenName()
-      this.$emit('update:device-id', '')
-      this.$emit('onStop')
+      if (!this.isResetFileId) {
+        this.$emit('update:device-id', '')
+        this.$emit('onStop')
+      }
+      return Promise.resolve()
     },
     /**
      * 暂停视频
