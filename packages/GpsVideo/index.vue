@@ -15,7 +15,7 @@
       <!-- 标题 -->
       <div v-if="showTitle" ref="videoTitle" class='videoTitle' :id="'videoTitle'+videoId">{{videoTitle}}</div>
       <!-- 工具栏 -->
-      <div :id="'videoToolBar'+videoId" class="videoToolBar" v-show="showToolBar">
+      <div :id="'videoToolBar'+videoId" class="videoToolsBar" v-show="showToolBar">
         <!-- 进度条 历史视频播放时显示 -->
         <v-progress v-if="showProgress" ref="onprogress" :video-id="videoId" :duration="duration" :rate="rate" @onPlaying="onPlayHistory" @onSeek="onSeek"></v-progress>
 <!--        <div v-if="showProgress" :id="'progress'+videoId" class="progressHis">
