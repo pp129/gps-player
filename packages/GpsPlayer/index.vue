@@ -140,13 +140,13 @@ export default {
   },
   data () {
     return {
+      publicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxesfHzXbRZ/QCYFr9uhj+OhYuvw7qJC5o6MCexJoNrxu6a9aLXvz9OMXIQMpvcbGua1E1MXcTiaHTRTphaSOYhtVNdef5EaTy/LHcovzNF05xTLI9/32239hMykJTWtp0z/IeZOBT6lVN30WQBvOfP7CnTyVHZ9jtPqW0OAQSPwIDAQAB',
       token: '',
       talkbackId: `talkback${this.containerId}`,
       load: false,
       container: null,
       fullDivIndex: null,
       fullScreenIndex: null,
-      publicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxesfHzXbRZ/QCYFr9uhj+OhYuvw7qJC5o6MCexJoNrxu6a9aLXvz9OMXIQMpvcbGua1E1MXcTiaHTRTphaSOYhtVNdef5EaTy/LHcovzNF05xTLI9/32239hMykJTWtp0z/IeZOBT6lVN30WQBvOfP7CnTyVHZ9jtPqW0OAQSPwIDAQAB',
       flvPlayerArr: [],
       deviceArr: [],
       progressArr: [],
@@ -318,8 +318,9 @@ export default {
     },
     /**
      * 根据设备id和文件id停止下载文件
-     * @param {*} deviceId  设备id
-     * @param {*} fileId  文件id
+     * @param deviceId 设备id
+     * @param fileId 文件id
+     * @returns {Promise<AxiosResponse<any>>}
      */
     stopDownload (deviceId, fileId) {
       // 通知后台查询历史文件列表
@@ -331,6 +332,23 @@ export default {
         return res.data
       })
     },
+    validWsServer () {
+      if (this.wsServer) {
+        if (this.wsServer.indexOf('ws://') > -1) {
+          return this.wsServer
+        } else {
+          return `ws://${this.wsServer}`
+        }
+      } else {
+        if (this.server.indexOf('http://') > -1) {
+          return this.server.replace('http', 'ws')
+        } else if (this.server.indexOf('https://') > -1) {
+          return this.server.replace('https', 'wss')
+        } else {
+          return `ws://${this.server}`
+        }
+      }
+    },
     _download (deviceId, fileId, uuid) {
       fileId = fileId.replace(' - ', '_').replace(/\s+/g, '')
       const key = deviceId + '_' + fileId
@@ -341,7 +359,7 @@ export default {
       }
       if ('WebSocket' in window) {
         // 打开一个 web socket
-        let ws = new WebSocket(this.wsServer + '/wsDownload')
+        let ws = new WebSocket(this.validWsServer() + '/wsDownload')
         this.downloadWebsocketMap.set(key, ws)
         ws.onopen = function () {
           // Web Socket 已连接上，使用 send() 方法发送数据
@@ -385,7 +403,6 @@ export default {
       return this.downloadMap.get(key)
     },
     openDownLoadUrl (deviceId, fileId) {
-      // downloadHisFile(deviceId, fileId)
       const url = '/sppt/api/downloadHisFile?deviceId=' + deviceId + '&fileId=' + fileId
       window.open(url)
     }

@@ -65,10 +65,10 @@ export default {
       showPlayer: true,
       server: '/sppt',
       wsServer: 'ws://35.231.35.131:8000/sppt',
-      // userName: 'XMGPS_JW',
-      // password: 'Xmgps@2022',
-      userName: 'admin',
-      password: 'Xmgps@0592',
+      userName: 'XMGPS_JW',
+      password: 'Xmgps@2022',
+      // userName: 'admin',
+      // password: 'Xmgps@0592',
       videoTitle: 'name',
       deviceId: '',
       deviceList: [
@@ -163,7 +163,7 @@ export default {
       const params = { deviceId: item.id, beginTime: beginTime, endTime: endTime }
       this.$refs.gpsPlayer.getHisResourceList(params).then(res => {
         console.log(res)
-        item.historyList = res
+        item.historyList = res.resultList
       })
     },
     playHistory (item, history) {

@@ -40,15 +40,15 @@
             :style="progressFillStyle">
         </div>-->
         <!-- 播放/暂停 按钮 -->
-        <div v-if="toolPlay" class="toolBtn" :id="toolsMap.play.id" :class="toolsMap.play.active?'play':'pause'" :title="toolsMap.play.active?'播放':'暂停'" @click="playEvent"></div>
+        <div v-if="toolPlay" class="tool-btn" :id="toolsMap.play.id" :class="toolsMap.play.active?'play':'pause'" :title="toolsMap.play.active?'播放':'暂停'" @click="playEvent"></div>
         <!-- 停止按钮 -->
-        <div v-if="toolStop" class="toolBtn stop" :id="toolsMap.stop.id" :title="'停止'" @click.prevent="stop()"></div>
+        <div v-if="toolStop" class="tool-btn stop" :id="toolsMap.stop.id" :title="'停止'" @click.prevent="stop()"></div>
         <!-- 静音/声音开启 按钮 -->
-        <div v-if="toolMuted" class="toolBtn" :id="toolsMap.muted.id" :class="toolsMap.muted.active?'muted':'unmuted'" :title="toolsMap.muted.active?'声音':'静音'" @click="mutedEvent"></div>
+        <div v-if="toolMuted" class="tool-btn" :id="toolsMap.muted.id" :class="toolsMap.muted.active?'muted':'unmuted'" :title="toolsMap.muted.active?'声音':'静音'" @click="mutedEvent"></div>
         <!-- 通话/结束通话 按钮 -->
-        <div v-if="toolTalk" class="toolBtn" :id="toolsMap.talk.id" :class="toolsMap.talk.active?'startTalk':'stopTalk'" :title="toolsMap.talk.active?'开始对讲':'结束对讲'" @click="talkEvent"></div>
+        <div v-if="toolTalk" class="tool-btn" :id="toolsMap.talk.id" :class="toolsMap.talk.active?'startTalk':'stopTalk'" :title="toolsMap.talk.active?'开始对讲':'结束对讲'" @click="talkEvent"></div>
         <!-- 云台 按钮 -->
-        <div v-if="ptzControl&&toolControl&&!showProgress" class="toolBtn control" :id="toolsMap.control.id" :title="toolsMap.control.active?'开启云台操作':'关闭云台操作'" @click.prevent.stop="controlEvent">{{toolsMap.control.active?'开启云台':'关闭云台'}}</div>
+        <div v-if="ptzControl&&toolControl&&!showProgress" class="tool-btn control" :id="toolsMap.control.id" :title="toolsMap.control.active?'开启云台操作':'关闭云台操作'" @click.prevent.stop="controlEvent">{{toolsMap.control.active?'开启云台':'关闭云台'}}</div>
         <!-- 时间进度 历史视频播放时显示 -->
         <div v-if="showProgress" :id="'progressTime'+videoId" class="progressTime">
           <div :id="'timeBox'+videoId" class="timeBox">
@@ -59,22 +59,22 @@
         </div>
         <!-- 历史视频倍速 -->
         <div v-if="showProgress" :id="'progressRate'+videoId" class="progressRate">
-          <div @click="setOperation(1)" class="toolBtn fastBackward"></div>
+          <div @click="setOperation(1)" class="tool-btn fastBackward"></div>
           <select v-if="showRate" @change="setRate" v-model="rate" class="rateSelection">
             <option v-for="(item,index) in rateList[operation]" :key="index" :value="item.value">{{ item.name }}</option>
           </select>
-          <div @click="setOperation(0)" class="toolBtn fastForward"></div>
+          <div @click="setOperation(0)" class="tool-btn fastForward"></div>
         </div>
         <!-- 画面拉伸/标准 按钮 -->
-        <div v-if="toolTiling" class="toolBtn" :id="toolsMap.tiling.id" :class="toolsMap.tiling.active?'tiling':'untiling'" :title="toolsMap.tiling.active?'拉伸':'标准'" @click="tilingEvent">{{toolsMap.tiling.active?'拉伸':'标准'}}</div>
+        <div v-if="toolTiling" class="tool-btn" :id="toolsMap.tiling.id" :class="toolsMap.tiling.active?'tiling':'untiling'" :title="toolsMap.tiling.active?'拉伸':'标准'" @click="tilingEvent">{{toolsMap.tiling.active?'拉伸':'标准'}}</div>
         <!-- 截图 按钮 -->
-        <div v-if="toolSnapshot" class="toolBtn snapshot" :id="toolsMap.snapshot.id" title="截屏" @click="snapshot"></div>
+        <div v-if="toolSnapshot" class="tool-btn snapshot" :id="toolsMap.snapshot.id" title="截屏" @click="snapshot"></div>
         <!-- 全屏/取消全屏 按钮 -->
-        <div v-if="toolFullScreen" class="toolBtn" :id="toolsMap.fullScreen.id" :class="toolsMap.fullScreen.active?'fullScreen':'narrowScreen'" :title="toolsMap.fullScreen.active?'全屏':'缩屏'" @click="fullScreenEvent"></div>
+        <div v-if="toolFullScreen" class="tool-btn" :id="toolsMap.fullScreen.id" :class="toolsMap.fullScreen.active?'fullScreen':'narrowScreen'" :title="toolsMap.fullScreen.active?'全屏':'缩屏'" @click="fullScreenEvent"></div>
         <!-- 录制/取消录制 按钮 -->
-        <div v-if="toolRecord" class="toolBtn" :id="toolsMap.record.id" :class="toolsMap.record.active?'startRecord':'stopRecord'" :title="toolsMap.record.active?'开始录制':'结束录制'" @click="recordEvent"></div>
+        <div v-if="toolRecord" class="tool-btn" :id="toolsMap.record.id" :class="toolsMap.record.active?'startRecord':'stopRecord'" :title="toolsMap.record.active?'开始录制':'结束录制'" @click="recordEvent"></div>
         <!-- 滤镜 按钮 -->
-        <div v-if="toolSetting" class="toolBtn" :id="toolsMap.setting.id" :class="toolsMap.setting.active?'openSetting':'closeSetting'" :title="toolsMap.setting.active?'开启滤镜':'关闭滤镜'" @click="settingEvent"></div>
+        <div v-if="toolSetting" class="tool-btn" :id="toolsMap.setting.id" :class="toolsMap.setting.active?'openSetting':'closeSetting'" :title="toolsMap.setting.active?'开启滤镜':'关闭滤镜'" @click="settingEvent"></div>
       </div>
       <!-- 消息 -->
       <div :id="'msgDiv'+videoId" class="msgDiv"></div>
@@ -222,24 +222,24 @@ export default {
       showLoading: false,
       isSelected: false,
       toolsMap: {
-        play: { btn: 'play', id: `playBtn${this.videoId}`, class: 'toolBtn play', title: '播放', active: true },
-        // pause: { id: `pauseBtn${this.videoId}`, class: 'toolBtn pause', title: '暂停' },
-        stop: { btn: 'stop', id: `stopBtn${this.videoId}`, class: 'toolBtn stop', title: '停止' },
-        muted: { btn: 'muted', id: `mutedBtn${this.videoId}`, class: 'toolBtn muted', title: '声音', active: true },
-        // unmuted: { id: `unmutedBtn${this.videoId}`, class: 'toolBtn unmuted', title: '静音' },
-        talk: { btn: 'talk', id: `startTalkBtn${this.videoId}`, class: 'toolBtn startTalk', title: '开始对讲', active: true },
-        control: { btn: 'control', id: `startControlBtn${this.videoId}`, class: 'toolBtn startControl', title: '开启云台操作', active: true },
-        // stopTalk: { id: `stopTalkBtn${this.videoId}`, class: 'toolBtn stopTalk', title: '结束对讲' },
+        play: { btn: 'play', id: `playBtn${this.videoId}`, class: 'tool-btn play', title: '播放', active: true },
+        // pause: { id: `pauseBtn${this.videoId}`, class: 'tool-btn pause', title: '暂停' },
+        stop: { btn: 'stop', id: `stopBtn${this.videoId}`, class: 'tool-btn stop', title: '停止' },
+        muted: { btn: 'muted', id: `mutedBtn${this.videoId}`, class: 'tool-btn muted', title: '声音', active: true },
+        // unmuted: { id: `unmutedBtn${this.videoId}`, class: 'tool-btn unmuted', title: '静音' },
+        talk: { btn: 'talk', id: `startTalkBtn${this.videoId}`, class: 'tool-btn startTalk', title: '开始对讲', active: true },
+        control: { btn: 'control', id: `startControlBtn${this.videoId}`, class: 'tool-btn startControl', title: '开启云台操作', active: true },
+        // stopTalk: { id: `stopTalkBtn${this.videoId}`, class: 'tool-btn stopTalk', title: '结束对讲' },
         progressTime: { btn: 'progressTime', id: `progressTime${this.videoId}`, class: 'progressTime', title: '' },
-        tiling: { btn: 'tiling', id: `tilingBtn${this.videoId}`, class: 'toolBtn tiling', title: '拉伸', text: '拉伸', active: true },
-        // untiling: { id: `untilingBtn${this.videoId}`, class: 'toolBtn untiling', title: '标准' },
-        snapshot: { btn: 'snapshot', id: `snapshotBtn${this.videoId}`, class: 'toolBtn snapshot', title: '截屏' },
-        fullScreen: { btn: 'fullScreen', id: `fullScreenBtn${this.videoId}`, class: 'toolBtn fullScreen', title: '全屏', active: true },
-        // narrowScreen: { id: `narrowScreenBtn${this.videoId}`, class: 'toolBtn narrowScreen', title: '缩屏' },
-        record: { btn: 'record', id: `startRecordBtn${this.videoId}`, class: 'toolBtn startRecord', title: '开始录制', active: true },
-        // stopRecord: { id: `stopRecordBtn${this.videoId}`, class: 'toolBtn stopRecord', title: '结束录制' },
-        setting: { btn: 'setting', id: `openSettingBtn${this.videoId}`, class: 'toolBtn openSetting', title: '开启滤镜', active: true }
-        // closeSetting: { id: `closeSettingBtn${this.videoId}`, class: 'toolBtn closeSetting', title: '关闭滤镜' }
+        tiling: { btn: 'tiling', id: `tilingBtn${this.videoId}`, class: 'tool-btn tiling', title: '拉伸', text: '拉伸', active: true },
+        // untiling: { id: `untilingBtn${this.videoId}`, class: 'tool-btn untiling', title: '标准' },
+        snapshot: { btn: 'snapshot', id: `snapshotBtn${this.videoId}`, class: 'tool-btn snapshot', title: '截屏' },
+        fullScreen: { btn: 'fullScreen', id: `fullScreenBtn${this.videoId}`, class: 'tool-btn fullScreen', title: '全屏', active: true },
+        // narrowScreen: { id: `narrowScreenBtn${this.videoId}`, class: 'tool-btn narrowScreen', title: '缩屏' },
+        record: { btn: 'record', id: `startRecordBtn${this.videoId}`, class: 'tool-btn startRecord', title: '开始录制', active: true },
+        // stopRecord: { id: `stopRecordBtn${this.videoId}`, class: 'tool-btn stopRecord', title: '结束录制' },
+        setting: { btn: 'setting', id: `openSettingBtn${this.videoId}`, class: 'tool-btn openSetting', title: '开启滤镜', active: true }
+        // closeSetting: { id: `closeSettingBtn${this.videoId}`, class: 'tool-btn closeSetting', title: '关闭滤镜' }
       },
       showSetting: false,
       nowTime: '00:00:00',
