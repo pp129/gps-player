@@ -197,16 +197,13 @@ export default {
     },
     setActive (value, isSelected) {
       if (this.selectOnClick) {
-        console.log('active value', value)
         this.activeIndex = this.$slots.default.findIndex(x => x.elm.id === 'videoContainer-' + value)
-        console.log('active index', this.activeIndex)
         this.isSelected = isSelected
         this.$emit('onSelect', this.activeIndex, value, isSelected)
       }
     },
     resetContainer () {
       this.$slots.default.forEach(video => {
-        console.log(video.elm)
         video.elm.__vue__.showVideo = !video.elm.__vue__.showVideo
       })
     },
@@ -254,10 +251,8 @@ export default {
     keydown (e) {
       const eve = e || event
       const key = eve.keyCode
-      console.log(key)
       let action = ''
       if (this.isSelected) {
-        console.log(this.$slots.default[this.activeIndex])
         switch (key) {
           case 37:
             action = 'ptzleft'
@@ -287,7 +282,6 @@ export default {
     },
     getHisResourceList (params) {
       return $axios.post('/getHisResourceList', qs.stringify(params)).then(res => {
-        console.log(res)
         const data = res.data
         if (data.flag) {
           return Promise.resolve(data.entity)
@@ -409,7 +403,6 @@ export default {
   },
   created () {
     this.setServer()
-    // console.log(this.$slots)
     this.login().then(res => {
       this.load = true
       if (res.data.flag) {

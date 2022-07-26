@@ -165,7 +165,6 @@ export default {
     state: {
       type: [String, Object],
       validator (value) {
-        console.log(value)
         // 播放、暂停、停止
         return ['play', 'pause', 'stop', '', null, undefined].includes(value)
       }
@@ -302,10 +301,10 @@ export default {
   },
   computed: {
     videoWidth () {
-      return this.width || this.GpsPlayer.containerWidth
+      return (typeof this.width === 'string' ? this.width : this.width + 'px') || this.GpsPlayer.containerWidth
     },
     videoHeight () {
-      return this.height || this.GpsPlayer.containerHeight
+      return (typeof this.height === 'string' ? this.height : this.height + 'px') || this.GpsPlayer.containerHeight
     },
     relative () {
       return this.GpsPlayer.relative
@@ -352,7 +351,6 @@ export default {
   watch: {
     deviceId: {
       handler (newValue, oldValue) {
-        console.log('device id', newValue, oldValue)
         if (newValue) {
           this.bindDevice()
         }
@@ -360,7 +358,6 @@ export default {
     },
     fileId: {
       handler (newValue, oldValue) {
-        console.log('file id', newValue, oldValue)
         if (oldValue && newValue) {
           this.bindDeviceFile()
         }
@@ -395,7 +392,6 @@ export default {
       if (!this.deviceId) {
         return false
       }
-      console.log('bind device')
       if (this.fileId) {
         this.fileIdPlay = this.fileId.replace(' - ', '_').replace(/\s+/g, '')
         this.device = this.deviceId + '_' + this.fileId
@@ -412,8 +408,6 @@ export default {
         fileId: this.fileIdPlay,
         userName: this.GpsPlayer.userName
       }
-      console.log(params)
-      // debugger
       // return false
       // eslint-disable-next-line no-unreachable
       $axios.post('/getVideoUrl', qs.stringify(params)).then(response => {
@@ -424,7 +418,6 @@ export default {
           this.surplusTime = this.formatSeconds(data.entity.time)
           // 考虑历史的播放情况  uuid需要存储
           this.VideoUrl = data.entity.url
-          console.log(this.GpsPlayer.token, this.GpsPlayer.userName)
           this.createPlayer(videoElement)
           if (lastFrameUrl === undefined || lastFrameUrl === null || lastFrameUrl === '') {
             this.$refs.videoElement.poster = ''
@@ -447,11 +440,7 @@ export default {
         enableStashBuffer: false
         // stashInitialSize: 128,
       })
-      console.log('flvPlayer------', this.flvPlayer)
       this.flvPlayer.on('statistics_info', (res) => {
-        // console.log('statistics_info current time', this.$refs.videoElement.currentTime)
-        // console.log('statistics_info end time', this.$refs.videoElement.endTime)
-        // console.log('statistics_info res', res)
         // if (this.fileId) {
         //   const currentTime = this.$refs.videoElement.currentTime
         //   this.nowTime = this.formatSeconds(currentTime)
@@ -525,7 +514,6 @@ export default {
               this.nowTime = this.formatSeconds(this.progressPoint)
             }
           }
-          // console.log(video.currentTime)
           // this.progressPoint = parseInt(video.currentTime)
           // this.nowTime = this.formatSeconds(this.progressPoint)
         }, 1000/* 时间1秒更新一次 */)
@@ -547,7 +535,6 @@ export default {
       }
     },
     play () {
-      console.log('on play')
       const video = this.$refs.videoElement
       this.showTitle = true
       // 播放之前清除上次播放的超时机制
@@ -584,7 +571,6 @@ export default {
           // _this.progressPoint = _this.$refs.videoElement.currentTime
           // _this.nowTime = _this.formatSeconds(_this.progressPoint)
           const len = this.buffered.length
-          // console.log(len)
           if (len !== 0) {
             const buftime = this.buffered.end(len - 1) - this.currentTime
             if (buftime >= 10) {
@@ -599,13 +585,11 @@ export default {
         }
 
         if (this.showProgress) {
-          console.log('show progress')
           this.$refs.onprogress.start()
         }
 
         // 开始录屏
         this.resumeRecord()
-        console.log('on load')
         this.showLoading = false
       }).catch(function (error) {
         console.log(error)
@@ -637,7 +621,6 @@ export default {
       }
       // 清除设备记录
       this.deviceIdPlay = null
-      console.log('lastFrameUrl', lastFrameUrl)
       if (lastFrameUrl === undefined || lastFrameUrl === null || lastFrameUrl === '') {
         const video = this.$refs.videoElement
         if (video) {
@@ -1038,13 +1021,14 @@ export default {
       // 先移除resize事件
       // window.onresize = '';
       const videoContainer = this.$refs.videoContainer
-      console.log(videoContainer)
       if (videoContainer.requestFullscreen) {
         videoContainer.requestFullscreen()
       } else if (videoContainer.mozRequestFullScreen) {
         videoContainer.mozRequestFullScreen()
       } else if (videoContainer.webkitRequestFullScreen) {
         videoContainer.webkitRequestFullScreen()
+      } else {
+        alert('当前浏览器不支持')
       }
       this.toolsMap.fullScreen.active = false
       // 若设置了标题，隐藏标题,重新计算高度
@@ -1127,31 +1111,33 @@ export default {
      * 双击窗口
      */
     onVideoDblClick () {
-      console.log(this.$parent.videoCount)
-      if (this.$parent.videoCount > 1) {
-        const sWidth = Number(this.$parent.containerWidth.split('px')[0])
-        const sHeight = Number(this.$parent.containerHeight.split('px')[0])
-        console.log(sWidth, sHeight)
-        const videoWidth = this.$refs.videoContainer.offsetWidth
-        const videoHeight = this.$refs.videoContainer.offsetHeight
-        console.log(videoWidth, videoHeight)
-        this.GpsPlayer.resetContainer()
-        this.showVideo = true
-        if (videoWidth === sWidth && videoHeight === sHeight) {
-          this.$refs.videoContainer.style.height = this.videoHeight
-          this.$refs.videoContainer.style.width = this.videoWidth
-          this.$refs.videoContainer.style.top = this.position.top
-          this.$refs.videoContainer.style.left = this.position.left
-          this.$refs.videoContainer.style.bottom = this.position.bottom
-          this.$refs.videoContainer.style.right = this.position.right
-        } else {
-          this.$refs.videoContainer.style.height = sHeight + 'px'
-          this.$refs.videoContainer.style.width = sWidth + 'px'
-          this.$refs.videoContainer.style.top = '0px'
-          this.$refs.videoContainer.style.left = '0px'
+      const isFullscreen = !this.toolsMap.fullScreen.active
+      if (isFullscreen) {
+        this.narrowScreen()
+      } else {
+        if (this.$parent.videoCount > 1) {
+          const sWidth = Number(this.$parent.containerWidth.split('px')[0])
+          const sHeight = Number(this.$parent.containerHeight.split('px')[0])
+          const videoWidth = this.$refs.videoContainer.offsetWidth
+          const videoHeight = this.$refs.videoContainer.offsetHeight
+          this.GpsPlayer.resetContainer()
+          this.showVideo = true
+          if (videoWidth === sWidth && videoHeight === sHeight) {
+            this.$refs.videoContainer.style.height = this.videoHeight
+            this.$refs.videoContainer.style.width = this.videoWidth
+            this.$refs.videoContainer.style.top = this.position.top
+            this.$refs.videoContainer.style.left = this.position.left
+            this.$refs.videoContainer.style.bottom = this.position.bottom
+            this.$refs.videoContainer.style.right = this.position.right
+          } else {
+            this.$refs.videoContainer.style.height = sHeight + 'px'
+            this.$refs.videoContainer.style.width = sWidth + 'px'
+            this.$refs.videoContainer.style.top = '0px'
+            this.$refs.videoContainer.style.left = '0px'
+          }
+        } else if (this.$parent.videoCount === 1) {
+          this.fullScreenEvent()
         }
-      } else if (this.$parent.videoCount === 1) {
-        this.fullScreenEvent()
       }
     },
     /**
@@ -1166,7 +1152,6 @@ export default {
       const x1 = ev.clientX
       const y1 = ev.clientY
       this.mousemove.timing = new Date()
-      // console.log('on mouse move', evt)
       // 给可视区域添加鼠标的移动事件
       document.onmousemove = (eve) => {
         // event的兼容性
@@ -1179,7 +1164,6 @@ export default {
         // 计算出鼠标的移动距离
         const x = x2 - x1
         const y = y2 - y1
-        // console.log('计算出鼠标的移动距离', x, y)
         this.mousemove.x = x
         this.mousemove.y = y
       }
@@ -1223,7 +1207,6 @@ export default {
      * @param e
      */
     onmousewheel (e) {
-      console.log(e)
       // 0----down  1----up
       const direction = e.deltaY > 0 ? '0' : '1'
       // 下面的逻辑实现的是内部元素横向滚动，前提设置好内部元素横向的滚动样式了
@@ -1272,7 +1255,6 @@ export default {
      * 滤镜操作
      */
     setBrightnessVal () {
-      console.log(this.brightnessVal)
       this.setVideoFilter('brightness', this.brightnessVal)
     },
     setGrayscaleVal () {
@@ -1286,7 +1268,6 @@ export default {
     },
     setVideoFilter (type, value) {
       const styleArr = getComputedStyle(this.$refs.videoElement).getPropertyValue('filter').split(' ')
-      console.log(styleArr)
       for (let i = 0; i < styleArr.length; i++) {
         if (styleArr[i].indexOf(type) !== -1) {
           styleArr[i] = type + '(' + (value / 100) + ')'
@@ -1314,8 +1295,6 @@ export default {
       this.showToolBar = false
     },
     async changeProcess (evt) {
-      console.log('changeProcess', evt)
-      console.log(this.progressPoint)
       const video = this.$refs.videoElement
       const params = {
         deviceId: this.deviceId,
@@ -1331,16 +1310,12 @@ export default {
       this.seekTime = this.progressPoint - video.currentTime
       this.pause()
       const res = await $axios.post('/seek', qs.stringify(params))
-      console.log(res)
       const data = res.data
       // 跳转到缓存的最新位置，防止暂停一直在收码流
       // const video = this.$refs.videoElement
-      // console.log('video buffered end', video.buffered.end(video.buffered.length - 1))
       // video.currentTime = video.buffered.end(video.buffered.length - 1)
-      // console.log(video.currentTime)
       if (data.flag) {
         console.log('seek 调用成功', this.progressPoint)
-        console.log('seek 调用成功 buffered', video.buffered.end(0))
         // this.$refs.videoElement.currentTime = parseInt(this.progressPoint)
         // this.startProgress()
       }
@@ -1351,12 +1326,6 @@ export default {
         video.currentTime = parseInt(this.progressPoint)
       })
       this.play()
-      // setTimeout(() => {
-      //   // this.$forceUpdate()
-      //   console.log('video.currentTime ', video.currentTime)
-      //   // 调用之后再播放
-      //   this.play()
-      // }, 3000)
     },
     onmousemove (evt) {
       this.showTargetPoint = true
@@ -1377,11 +1346,6 @@ export default {
     },
     setOperation (mode) {
       this.showRate = true
-      // console.log(this.rateList)
-      // console.log(mode)
-      // console.log(this.rateList[mode])
-      // console.log(this.rateIndex)
-      // console.log(this.rateList[mode][this.rateIndex])
       if (mode === this.operation) {
         if (this.rateIndex < this.rateList[mode].length - 1) {
           this.rateIndex++
@@ -1435,9 +1399,7 @@ export default {
     }
   },
   mounted () {
-    console.log('this.GpsPlayer.load', this.GpsPlayer.load)
     if (this.autoPlay && this.deviceId) {
-      console.log('init', this.deviceId)
       this.bindDevice()
       // this.play()
     }

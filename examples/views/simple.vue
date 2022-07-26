@@ -1,8 +1,11 @@
 <template>
   <div>
     <button @click="play">播放</button>
-    <gps-player :server="server" :user-name="userName" :password="password">
-      <gps-video :device-id="device.id" :video-title="device.name" @onStop="stop"></gps-video>
+    <gps-player :server="server" :user-name="userName" :password="password" :flex="'start'" :width="960" :height="720">
+      <gps-video :device-id="device.id" :video-title="device.name" @onStop="stop" :width="480" :height="360"></gps-video>
+      <gps-video :device-id="device.id" :video-title="device.name" @onStop="stop" :width="480" :height="360"></gps-video>
+      <gps-video :device-id="device.id" :video-title="device.name" @onStop="stop" :width="480" :height="360"></gps-video>
+      <gps-video :device-id="device.id" :video-title="device.name" @onStop="stop" :width="480" :height="360"></gps-video>
     </gps-player>
   </div>
 </template>
